@@ -1,0 +1,45 @@
+﻿@model aspgrupo2.Models.SportsArticle
+
+@{
+    ViewData["Title"] = "Eliminar Artículo";
+}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title">Confirmar Eliminación</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>¿Está seguro que desea eliminar este artículo?</strong>
+                    <p>Esta acción no se puede deshacer.</p>
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Precio)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Precio)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Stock)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Stock)</dd>
+                </dl>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Confirmar Eliminación
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

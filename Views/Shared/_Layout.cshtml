@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SportAdmin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false) <!-- Línea clave -->
+</head>
+<body>
+    @RenderBody()
+    <!-- Navbar Moderna -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <!-- Logo/Icono + Nombre (izquierda) -->
+                <div class="navbar-brand-wrapper">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-trophy-fill brand-icon"></i>
+                        <span class="brand-name">SportAdmin</span>
+                    </a>
+                </div>
+
+                <!-- Menú (derecha) -->
+                <div class="navbar-menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="SportsArticles" asp-action="Index">Artículos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Login/User (extremo derecho) -->
+                <div class="navbar-actions">
+                    <partial name="_LoginPartial" />
+                </div>
+
+                <!-- Botón móvil -->
+                <button class="navbar-toggler" type="button">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <div id="alert-container" class="position-fixed bottom-0 end-0 m-3" style="z-index: 1100;"></div>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
