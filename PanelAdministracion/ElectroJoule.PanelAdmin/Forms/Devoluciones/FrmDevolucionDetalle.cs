@@ -39,7 +39,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
             panelInfo.Controls.Add(new Label { Text = $"Estado actual: {_devolucion.Estado}", AutoSize = true, Location = new Point(0, 75) });
             Controls.Add(panelInfo);
 
-            var lblMotivo = new Label { Text = $"Motivo: {_devolucion.Motivo}", AutoSize = false, Dock = DockStyle.Top, Height = 58, Padding = new Padding(15, 0, 15, 0) };
+            var lblMotivo = new Label { Text = $"Motivo: {_devolucion.Motivo}", AutoSize = false, Dock = DockStyle.Top, Height = 75, Padding = new Padding(15, 0, 15, 0) };
             Controls.Add(lblMotivo);
 
             var grid = new DataGridView

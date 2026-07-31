@@ -6,7 +6,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Common
     /// ejecutando la versión compilada más reciente (útil mientras se ajustan las maquetas visuales).</summary>
     public static class VersionInfo
     {
-        public const string Build = "2026-07-31.06";
+        public const string Build = "2026-07-31.07";
     }
 
     public class FrmBase : Form
