@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar Devolución - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html">Catálogo</a>
+      <a href="mis-pedidos.html">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html" class="activo">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <h1 class="titulo-pagina">Solicitar Devolución</h1>
+  <p class="subtitulo-pagina">Buscá tu compra y solicitá la devolución de uno o más componentes (CU.015).</p>
+
+  <div class="tarjeta-form" style="margin-bottom: 24px;">
+    <h3 style="margin-top:0;">1. Buscar mi venta</h3>
+    <div style="display:flex; gap:10px;">
+      <input type="text" id="txtBuscarVenta" placeholder="N° de venta (ej: VTA-0512) o fecha (dd/mm/aaaa)" style="flex:1; padding:10px 12px; border:1px solid var(--gris-borde); border-radius:6px;">
+      <button class="btn btn-primario" onclick="buscarVenta()">Buscar</button>
+    </div>
+    <div id="resultadosVenta" style="margin-top:16px;"></div>
+    <div id="estadoVacioVenta" class="estado-vacio oculto">
+      <div class="icono">🧾</div>
+      No se encontró ninguna venta propia con ese número o fecha.
+    </div>
+  </div>
+
+  <div class="tarjeta-form oculto" id="formSolicitud" style="margin-bottom: 24px;">
+    <h3 style="margin-top:0;">2. Datos de la devolución</h3>
+    <p id="ventaSeleccionadaTexto" style="font-weight:600;"></p>
+    <div id="componentesVentaSeleccionada"></div>
+    <div class="campo-form" style="margin-top:14px;">
+      <label>Motivo de la devolución *</label>
+      <textarea id="txtMotivo" rows="3" placeholder="Describí el motivo (falla, error en el envío, etc.)"></textarea>
+      <div class="mensaje-error-campo" id="errMotivo">Debe indicar un motivo para la devolución.</div>
+    </div>
+    <div id="alertaSolicitud" class="alerta alerta-exito oculto">✓ Tu solicitud de devolución fue registrada y quedó en estado Pendiente.</div>
+    <button class="btn btn-primario" onclick="enviarSolicitud()">Enviar solicitud</button>
+  </div>
+
+  <h2 style="font-size:18px; color:var(--azul-oscuro);">Mis solicitudes de devolución</h2>
+  <table class="tabla-datos">
+    <thead><tr><th>N° Solicitud</th><th>Venta de origen</th><th>Fecha</th><th>Motivo</th><th>Estado</th></tr></thead>
+    <tbody id="cuerpoDevoluciones"></tbody>
+  </table>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  let ventaSeleccionada = null;
+  const componentesSeleccionados = {};
+
+  function buscarVenta() {
+    const texto = document.getElementById("txtBuscarVenta").value.trim().toLowerCase();
+    const cont = document.getElementById("resultadosVenta");
+    const vacio = document.getElementById("estadoVacioVenta");
+    cont.innerHTML = "";
+    document.getElementById("formSolicitud").classList.add("oculto");
+
+    if (texto === "") return;
+
+    const resultados = MIS_VENTAS.filter(v => v.numero.toLowerCase().includes(texto) || v.fecha.includes(texto));
+    if (resultados.length === 0) {
+      vacio.classList.remove("oculto");
+      return;
+    }
+    vacio.classList.add("oculto");
+
+    resultados.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "item-carrito";
+      div.style.gridTemplateColumns = "50px 1fr auto";
+      div.innerHTML = `
+        <div class="icono-item">🧾</div>
+        <div><strong>${v.numero}</strong> - ${v.fecha}<br><span style="font-size:12px; color:#8a93a3;">${v.items.map(i => `${i.componente} (x${i.cantidad})`).join(", ")} · Total ${formatearMoneda(v.total)}</span></div>
+        <button class="btn btn-secundario" onclick='seleccionarVenta("${v.numero}")'>Seleccionar</button>
+      `;
+      cont.appendChild(div);
+    });
+  }
+
+  function seleccionarVenta(numero) {
+    ventaSeleccionada = MIS_VENTAS.find(v => v.numero === numero);
+    document.getElementById("ventaSeleccionadaTexto").textContent = `Venta ${ventaSeleccionada.numero} - ${ventaSeleccionada.fecha}`;
+
+    const cont = document.getElementById("componentesVentaSeleccionada");
+    cont.innerHTML = "";
+    ventaSeleccionada.items.forEach(item => {
+      const id = `chk-${item.componente}`;
+      cont.innerHTML += `
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--gris-borde);">
+          <input type="checkbox" id="${id}" onchange="toggleComponente('${item.componente}', ${item.cantidad}, this.checked)">
+          <label for="${id}" style="flex:1; margin:0;">${item.componente}</label>
+          <input type="number" min="1" max="${item.cantidad}" value="${item.cantidad}" style="width:70px; padding:6px; border:1px solid var(--gris-borde); border-radius:5px;" id="cant-${item.componente}" disabled>
+        </div>`;
+    });
+
+    document.getElementById("formSolicitud").classList.remove("oculto");
+    document.getElementById("alertaSolicitud").classList.add("oculto");
+  }
+
+  function toggleComponente(componente, cantidadMax, marcado) {
+    document.getElementById(`cant-${componente}`).disabled = !marcado;
+    if (marcado) componentesSeleccionados[componente] = cantidadMax;
+    else delete componentesSeleccionados[componente];
+  }
+
+  function enviarSolicitud() {
+    const motivo = document.getElementById("txtMotivo").value.trim();
+    const errMotivo = document.getElementById("errMotivo");
+
+    if (motivo === "") {
+      errMotivo.classList.add("visible");
+      return;
+    }
+    errMotivo.classList.remove("visible");
+
+    document.getElementById("alertaSolicitud").classList.remove("oculto");
+  }
+
+  const badgesEstado = { "Pendiente": "badge-pendiente", "Aprobada": "badge-aprobada", "Rechazada": "badge-rechazada" };
+
+  function renderizarDevoluciones() {
+    const cuerpo = document.getElementById("cuerpoDevoluciones");
+    if (MIS_DEVOLUCIONES.length === 0) {
+      cuerpo.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#8a93a3; padding:30px;">Todavía no solicitaste ninguna devolución.</td></tr>`;
+      return;
+    }
+    MIS_DEVOLUCIONES.forEach(d => {
+      cuerpo.innerHTML += `<tr>
+        <td>${d.numero}</td><td>${d.ventaOrigen}</td><td>${d.fecha}</td><td>${d.motivo}</td>
+        <td><span class="badge-estado ${badgesEstado[d.estado]}">${d.estado}</span></td>
+      </tr>`;
+    });
+  }
+
+  renderizarDevoluciones();
+</script>
+</body>
+</html>

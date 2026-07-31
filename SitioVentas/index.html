@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="barra-anuncio">Envíos a todo el país · Compra 100% online con seguimiento de pedido</div>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html" class="activo">Catálogo</a>
+      <a href="mis-pedidos.html">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <h1 class="titulo-pagina">Catálogo de componentes electrónicos</h1>
+  <p class="subtitulo-pagina">Buscá por nombre o código y filtrá por categoría / marca (CU.010).</p>
+
+  <div class="barra-filtros">
+    <div class="campo-filtro buscar">
+      <label for="txtBuscar">Buscar</label>
+      <input type="text" id="txtBuscar" placeholder="Ej: resistencia, ESP32, RES-1K...">
+    </div>
+    <div class="campo-filtro">
+      <label for="cmbCategoria">Categoría</label>
+      <select id="cmbCategoria">
+        <option value="">Todas</option>
+      </select>
+    </div>
+    <div class="campo-filtro">
+      <label for="cmbMarca">Marca</label>
+      <select id="cmbMarca">
+        <option value="">Todas</option>
+      </select>
+    </div>
+    <button class="btn btn-primario" onclick="filtrarCatalogo()">Buscar</button>
+    <button class="btn btn-secundario" onclick="limpiarFiltros()">Limpiar</button>
+    <button class="btn btn-texto" onclick="simularSinResultados()">Simular búsqueda sin resultados</button>
+  </div>
+
+  <div id="gridProductos" class="grid-productos"></div>
+
+  <div id="estadoVacio" class="estado-vacio oculto">
+    <div class="icono">🔍</div>
+    <strong>No se encontraron componentes</strong>
+    <p>Probá con otro término de búsqueda o quitá los filtros aplicados.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  const grid = document.getElementById("gridProductos");
+  const estadoVacio = document.getElementById("estadoVacio");
+  const cmbCategoria = document.getElementById("cmbCategoria");
+  const cmbMarca = document.getElementById("cmbMarca");
+
+  CATEGORIAS.forEach(c => cmbCategoria.innerHTML += `<option value="${c}">${c}</option>`);
+  MARCAS.forEach(m => cmbMarca.innerHTML += `<option value="${m}">${m}</option>`);
+
+  function badgeStock(p) {
+    if (p.stock === 0) return `<span class="stock-info agotado">Sin stock</span>`;
+    if (p.stock <= 20) return `<span class="stock-info bajo">¡Últimas ${p.stock} unidades!</span>`;
+    return `<span class="stock-info disponible">Stock disponible: ${p.stock}</span>`;
+  }
+
+  function renderizarProductos(lista) {
+    grid.innerHTML = "";
+    if (lista.length === 0) {
+      grid.classList.add("oculto");
+      estadoVacio.classList.remove("oculto");
+      return;
+    }
+    grid.classList.remove("oculto");
+    estadoVacio.classList.add("oculto");
+
+    lista.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "tarjeta-producto";
+      div.innerHTML = `
+        <div class="imagen-producto">${p.icono}</div>
+        <div class="cuerpo-producto">
+          <span class="categoria-chip">${p.categoria}</span>
+          <div class="nombre-producto">${p.nombre}</div>
+          <div class="marca-producto">${p.marca} · ${p.codigo}</div>
+          <div class="precio-producto">${formatearMoneda(p.precio)}</div>
+          ${badgeStock(p)}
+          <div class="selector-cantidad">
+            <button type="button" onclick="cambiarCantidad('${p.codigo}', -1)">−</button>
+            <input type="number" id="cant-${p.codigo}" value="1" min="1" max="${p.stock}" ${p.stock === 0 ? "disabled" : ""}>
+            <button type="button" onclick="cambiarCantidad('${p.codigo}', 1)">+</button>
+          </div>
+          <div class="mensaje-error-campo" id="err-${p.codigo}"></div>
+          <button class="btn btn-primario btn-block" ${p.stock === 0 ? "disabled" : ""} onclick="agregarProducto('${p.codigo}')">
+            ${p.stock === 0 ? "Sin stock" : "Agregar al carrito"}
+          </button>
+        </div>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function cambiarCantidad(codigo, delta) {
+    const input = document.getElementById(`cant-${codigo}`);
+    let val = parseInt(input.value || "1") + delta;
+    if (val < 1) val = 1;
+    input.value = val;
+  }
+
+  function agregarProducto(codigo) {
+    const producto = CATALOGO.find(p => p.codigo === codigo);
+    const input = document.getElementById(`cant-${codigo}`);
+    const err = document.getElementById(`err-${codigo}`);
+    const cantidad = parseInt(input.value || "0");
+
+    if (cantidad > producto.stock) {
+      err.textContent = `La cantidad solicitada (${cantidad}) supera el stock disponible (${producto.stock}).`;
+      err.classList.add("visible");
+      return;
+    }
+    err.classList.remove("visible");
+    agregarAlCarrito(codigo, cantidad);
+
+    const boton = event.target;
+    const textoOriginal = boton.textContent;
+    boton.textContent = "✓ Agregado";
+    setTimeout(() => (boton.textContent = textoOriginal), 1200);
+  }
+
+  function filtrarCatalogo() {
+    const texto = document.getElementById("txtBuscar").value.trim().toLowerCase();
+    const categoria = cmbCategoria.value;
+    const marca = cmbMarca.value;
+
+    const resultado = CATALOGO.filter(p =>
+      (texto === "" || p.nombre.toLowerCase().includes(texto) || p.codigo.toLowerCase().includes(texto)) &&
+      (categoria === "" || p.categoria === categoria) &&
+      (marca === "" || p.marca === marca)
+    );
+    renderizarProductos(resultado);
+  }
+
+  function limpiarFiltros() {
+    document.getElementById("txtBuscar").value = "";
+    cmbCategoria.value = "";
+    cmbMarca.value = "";
+    renderizarProductos(CATALOGO);
+  }
+
+  function simularSinResultados() {
+    document.getElementById("txtBuscar").value = "componente-inexistente-xyz";
+    filtrarCatalogo();
+  }
+
+  document.getElementById("txtBuscar").addEventListener("keyup", e => { if (e.key === "Enter") filtrarCatalogo(); });
+
+  renderizarProductos(CATALOGO);
+</script>
+</body>
+</html>

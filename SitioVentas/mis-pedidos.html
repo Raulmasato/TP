@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Pedidos - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html">Catálogo</a>
+      <a href="mis-pedidos.html" class="activo">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <h1 class="titulo-pagina">Mis Pedidos</h1>
+  <p class="subtitulo-pagina">Armá un pedido manualmente o consultá el estado de tus pedidos anteriores (CU.013).</p>
+
+  <div class="tabs">
+    <div class="tab-btn activo" data-tab="armar" onclick="mostrarTab('armar')">Armar pedido</div>
+    <div class="tab-btn" data-tab="listado" onclick="mostrarTab('listado')">Mis pedidos</div>
+  </div>
+
+  <section id="tabArmar">
+    <div class="layout-dos-columnas">
+      <div>
+        <div class="tarjeta-form">
+          <h3 style="margin-top:0;">Buscar componentes</h3>
+          <div style="display:flex; gap:10px; margin-bottom:16px;">
+            <input type="text" id="txtBuscarPedido" placeholder="Buscar por nombre o código..." style="flex:1; padding:10px 12px; border:1px solid var(--gris-borde); border-radius:6px;">
+            <button class="btn btn-primario" onclick="buscarComponentesPedido()">Buscar</button>
+          </div>
+          <div id="resultadosPedido"></div>
+          <div id="estadoVacioPedido" class="estado-vacio oculto">
+            <div class="icono">🔍</div>
+            No se encontraron componentes para el término ingresado.
+          </div>
+        </div>
+      </div>
+
+      <aside class="resumen-carrito">
+        <h3 style="margin-top:0;">Detalle del pedido</h3>
+        <div id="lineasPedido">
+          <p style="color:#8a93a3; font-size:13.5px;">Todavía no agregaste componentes al pedido.</p>
+        </div>
+        <div class="linea-resumen total">
+          <span>Total</span>
+          <span id="totalPedido">$ 0,00</span>
+        </div>
+        <br>
+        <div id="alertaPedido" class="alerta alerta-exito oculto">✓ Pedido registrado correctamente. Podés ver su estado en la solapa "Mis pedidos".</div>
+        <button class="btn btn-primario btn-block" id="btnRegistrarPedido" onclick="registrarPedido()" disabled>Registrar pedido</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="tabListado" class="oculto">
+    <table class="tabla-datos">
+      <thead>
+        <tr><th>N° Pedido</th><th>Fecha</th><th>Componentes</th><th>Total</th><th>Estado</th></tr>
+      </thead>
+      <tbody id="cuerpoListadoPedidos"></tbody>
+    </table>
+    <div id="estadoVacioListado" class="estado-vacio oculto">
+      <div class="icono">📦</div>
+      Todavía no realizaste ningún pedido.
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  function mostrarTab(tab) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("activo", b.dataset.tab === tab));
+    document.getElementById("tabArmar").classList.toggle("oculto", tab !== "armar");
+    document.getElementById("tabListado").classList.toggle("oculto", tab !== "listado");
+  }
+
+  let pedidoActual = [];
+
+  function buscarComponentesPedido() {
+    const texto = document.getElementById("txtBuscarPedido").value.trim().toLowerCase();
+    const resultados = document.getElementById("resultadosPedido");
+    const vacio = document.getElementById("estadoVacioPedido");
+    const lista = texto === "" ? [] : CATALOGO.filter(p => p.nombre.toLowerCase().includes(texto) || p.codigo.toLowerCase().includes(texto));
+
+    resultados.innerHTML = "";
+    if (texto !== "" && lista.length === 0) {
+      resultados.classList.add("oculto");
+      vacio.classList.remove("oculto");
+      return;
+    }
+    resultados.classList.remove("oculto");
+    vacio.classList.add("oculto");
+
+    lista.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "item-carrito";
+      div.style.gridTemplateColumns = "50px 1fr auto auto";
+      div.innerHTML = `
+        <div class="icono-item">${p.icono}</div>
+        <div><strong>${p.nombre}</strong><br><span style="font-size:12px; color:#8a93a3;">${p.codigo} · Stock: ${p.stock}</span></div>
+        <input type="number" value="1" min="1" max="${p.stock}" style="width:60px; padding:6px; border:1px solid var(--gris-borde); border-radius:5px;" id="cant-ped-${p.codigo}">
+        <button class="btn btn-secundario" onclick="agregarAlPedido('${p.codigo}')">Agregar</button>
+      `;
+      resultados.appendChild(div);
+    });
+  }
+
+  function agregarAlPedido(codigo) {
+    const producto = CATALOGO.find(p => p.codigo === codigo);
+    const cantidad = parseInt(document.getElementById(`cant-ped-${codigo}`).value || "1");
+    const existente = pedidoActual.find(i => i.codigo === codigo);
+    if (existente) existente.cantidad += cantidad;
+    else pedidoActual.push({ codigo, cantidad });
+    renderizarPedido();
+  }
+
+  function quitarDelPedido(idx) {
+    pedidoActual.splice(idx, 1);
+    renderizarPedido();
+  }
+
+  function renderizarPedido() {
+    const cont = document.getElementById("lineasPedido");
+    const btn = document.getElementById("btnRegistrarPedido");
+    if (pedidoActual.length === 0) {
+      cont.innerHTML = `<p style="color:#8a93a3; font-size:13.5px;">Todavía no agregaste componentes al pedido.</p>`;
+      document.getElementById("totalPedido").textContent = formatearMoneda(0);
+      btn.disabled = true;
+      return;
+    }
+    cont.innerHTML = "";
+    let total = 0;
+    pedidoActual.forEach((item, idx) => {
+      const producto = CATALOGO.find(p => p.codigo === item.codigo);
+      const subtotal = producto.precio * item.cantidad;
+      total += subtotal;
+      cont.innerHTML += `<div class="linea-resumen"><span>${producto.nombre} (x${item.cantidad}) <a href="#" onclick="quitarDelPedido(${idx}); return false;" style="color:#e74c3c;">✕</a></span><span>${formatearMoneda(subtotal)}</span></div>`;
+    });
+    document.getElementById("totalPedido").textContent = formatearMoneda(total);
+    btn.disabled = false;
+  }
+
+  function registrarPedido() {
+    document.getElementById("alertaPedido").classList.remove("oculto");
+    pedidoActual = [];
+    renderizarPedido();
+    document.getElementById("resultadosPedido").innerHTML = "";
+    document.getElementById("txtBuscarPedido").value = "";
+  }
+
+  const badgesEstado = {
+    "Pendiente": "badge-pendiente", "Confirmado": "badge-confirmado", "En preparación": "badge-preparacion",
+    "Despachado": "badge-despachado", "Entregado": "badge-entregado", "Cancelado": "badge-cancelado"
+  };
+
+  function renderizarListadoPedidos() {
+    const cuerpo = document.getElementById("cuerpoListadoPedidos");
+    const tabla = cuerpo.closest("table");
+    const vacio = document.getElementById("estadoVacioListado");
+    if (MIS_PEDIDOS.length === 0) {
+      tabla.classList.add("oculto");
+      vacio.classList.remove("oculto");
+      return;
+    }
+    MIS_PEDIDOS.forEach(p => {
+      cuerpo.innerHTML += `<tr>
+        <td>${p.numero}</td><td>${p.fecha}</td>
+        <td>${p.items.map(i => `${i.componente} (x${i.cantidad})`).join(", ")}</td>
+        <td>${formatearMoneda(p.total)}</td>
+        <td><span class="badge-estado ${badgesEstado[p.estado]}">${p.estado}</span></td>
+      </tr>`;
+    });
+  }
+
+  renderizarListadoPedidos();
+</script>
+</body>
+</html>

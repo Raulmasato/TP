@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprobante - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html">Catálogo</a>
+      <a href="mis-pedidos.html">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <div class="pasos-checkout" style="justify-content:center; display:flex;">
+    <span class="paso">1. Carrito</span>
+    <span class="paso">2. Datos de pago</span>
+    <span class="paso activo">3. Comprobante</span>
+  </div>
+
+  <div class="comprobante">
+    <div class="encabezado-comprobante">
+      <div class="check-exito">✓</div>
+      <h2 style="margin:8px 0 2px;">¡Compra confirmada!</h2>
+      <p style="color:#6b7280; margin:0;">Tu comprobante fue generado correctamente.</p>
+    </div>
+
+    <table class="tabla-datos" style="margin-bottom:18px;">
+      <tbody>
+        <tr><td><strong>N° de comprobante</strong></td><td id="numeroComprobante">VTA-0513</td></tr>
+        <tr><td><strong>Fecha</strong></td><td id="fechaComprobante">31/07/2026 14:32</td></tr>
+        <tr><td><strong>Cliente</strong></td><td>Juan Pérez - DNI 30111222</td></tr>
+        <tr><td><strong>Método de pago</strong></td><td id="metodoComprobante">Efectivo</td></tr>
+      </tbody>
+    </table>
+
+    <table class="tabla-datos" id="tablaItemsComprobante">
+      <thead><tr><th>Componente</th><th>Cantidad</th><th>Precio unit.</th><th>Subtotal</th></tr></thead>
+      <tbody id="cuerpoItemsComprobante"></tbody>
+    </table>
+
+    <div style="text-align:right; margin-top:16px; font-size:20px; font-weight:800; color:#1f2430;">
+      Total: <span id="totalComprobante">$ 0,00</span>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:26px;">
+      <button class="btn btn-primario" style="flex:1;" onclick="descargarComprobante()">⬇ Descargar comprobante (PDF)</button>
+      <a href="index.html" class="btn btn-secundario" style="flex:1; text-align:center;">Volver al catálogo</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  const metodos = { efectivo: "Efectivo", transferencia: "Transferencia bancaria", tarjeta: "Tarjeta de crédito/débito" };
+  const metodo = localStorage.getItem("ej_ultimo_metodo_pago") || "efectivo";
+  document.getElementById("metodoComprobante").textContent = metodos[metodo] || "Efectivo";
+
+  let carrito = obtenerCarrito();
+  if (carrito.length === 0) {
+    carrito = [{ codigo: "MCU-ESP32", cantidad: 1 }, { codigo: "CON-USB-C", cantidad: 8 }];
+  }
+
+  const cuerpo = document.getElementById("cuerpoItemsComprobante");
+  let total = 0;
+  carrito.forEach(item => {
+    const producto = CATALOGO.find(p => p.codigo === item.codigo);
+    const subtotal = producto.precio * item.cantidad;
+    total += subtotal;
+    cuerpo.innerHTML += `<tr><td>${producto.nombre}</td><td>${item.cantidad}</td><td>${formatearMoneda(producto.precio)}</td><td>${formatearMoneda(subtotal)}</td></tr>`;
+  });
+  document.getElementById("totalComprobante").textContent = formatearMoneda(total);
+
+  function descargarComprobante() {
+    alert("Descargando comprobante VTA-0513.pdf (simulado - maqueta visual).");
+  }
+
+  // Vaciar el carrito luego de una compra confirmada.
+  guardarCarrito([]);
+</script>
+</body>
+</html>
