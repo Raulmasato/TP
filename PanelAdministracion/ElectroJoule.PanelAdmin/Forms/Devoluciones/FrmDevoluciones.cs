@@ -71,8 +71,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);
-            contenedorGrid.BringToFront();
-            panelSuperior.BringToFront();
         }
 
         private void Filtrar()

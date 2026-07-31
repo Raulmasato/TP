@@ -75,9 +75,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Errores
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);
-            contenedorGrid.BringToFront();
-            panelBotones.BringToFront();
-            panelFiltros.BringToFront();
         }
 
         private void Buscar()

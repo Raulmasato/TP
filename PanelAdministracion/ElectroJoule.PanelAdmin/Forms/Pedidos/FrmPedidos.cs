@@ -96,8 +96,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);
-            contenedorGrid.BringToFront();
-            panelFiltros.BringToFront();
         }
 
         private void LimpiarFiltros()

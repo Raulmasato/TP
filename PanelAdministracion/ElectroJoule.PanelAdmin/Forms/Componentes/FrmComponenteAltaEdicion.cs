@@ -80,9 +80,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Componentes
             AgregarFila(panel, "Categoría *:", _cmbCategoria, null);
             AgregarFila(panel, "Marca *:", _cmbMarca, null);
 
-            Controls.Add(panel);
-            panel.BringToFront();
-
             var panelBotones = new Panel { Dock = DockStyle.Bottom, Height = 55, Padding = new Padding(10) };
             var btnGuardar = new Button { Text = "Guardar", Width = 100, Location = new Point(150, 12), DialogResult = DialogResult.None };
             btnGuardar.Click += (s, e) => Guardar();
@@ -90,6 +87,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Componentes
             panelBotones.Controls.Add(btnGuardar);
             panelBotones.Controls.Add(btnCancelar);
             Controls.Add(panelBotones);
+            Controls.Add(panel);
             CancelButton = btnCancelar;
         }
 
