@@ -71,7 +71,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Bitacora
             _grid.Columns.Add("Accion", "Acción registrada");
 
             _lblSinResultados = new SinResultadosLabel();
-            var contenedorGrid = new Panel { Dock = DockStyle.Fill };
+            var contenedorGrid = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0, 18, 0, 0) };
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);

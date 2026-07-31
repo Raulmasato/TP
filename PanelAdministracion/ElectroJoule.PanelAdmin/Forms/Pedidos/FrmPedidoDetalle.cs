@@ -33,7 +33,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             _mensaje = new MensajePanel();
             Controls.Add(_mensaje);
 
-            var panelInfo = new Panel { Dock = DockStyle.Top, Height = 90, Padding = new Padding(15, 45, 15, 5) };
+            var panelInfo = new Panel { Dock = DockStyle.Top, Height = 108, Padding = new Padding(15, 45, 15, 5) };
             panelInfo.Controls.Add(new Label { Text = $"Cliente: {_pedido.Cliente}", AutoSize = true, Location = new Point(0, 0), Font = new Font("Segoe UI", 9.5F, FontStyle.Bold) });
             panelInfo.Controls.Add(new Label { Text = $"Fecha del pedido: {_pedido.Fecha:dd/MM/yyyy}", AutoSize = true, Location = new Point(0, 25) });
             Controls.Add(panelInfo);
