@@ -29,7 +29,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            CargarGrid(_pedidos.ToList());
+            Load += (s, e) => CargarGrid(_pedidos.ToList());
         }
 
         private void ConstruirUI()

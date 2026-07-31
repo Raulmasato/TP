@@ -24,7 +24,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Errores
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Buscar();
+            Load += (s, e) => Buscar();
         }
 
         private void ConstruirUI()
