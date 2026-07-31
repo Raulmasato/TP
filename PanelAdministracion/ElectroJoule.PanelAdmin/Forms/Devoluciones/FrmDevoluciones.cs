@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
 {
     /// <summary>CU.015 Gestión de Devoluciones (parte Administrador).</summary>
-    public class FrmDevoluciones : Form
+    public class FrmDevoluciones : FrmBase
     {
         private readonly BindingList<Devolucion> _devoluciones = new BindingList<Devolucion>(Mocks.Devoluciones);
         private DataGridView _grid;

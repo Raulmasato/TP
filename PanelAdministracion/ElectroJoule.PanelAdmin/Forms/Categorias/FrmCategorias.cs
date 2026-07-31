@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Categorias
 {
     /// <summary>CU.004 Alta, CU.005 Modificación, CU.006 Baja de Categorías.</summary>
-    public class FrmCategorias : Form
+    public class FrmCategorias : FrmBase
     {
         private readonly BindingList<Categoria> _categorias = new BindingList<Categoria>(Mocks.Categorias);
         private TextBox _txtBuscar;

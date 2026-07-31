@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Proveedores
 {
-    public class FrmProveedorAltaEdicion : Form
+    public class FrmProveedorAltaEdicion : FrmBase
     {
         private readonly List<Proveedor> _existentes;
         private readonly bool _esEdicion;

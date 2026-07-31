@@ -5,7 +5,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Pedidos
 {
-    public class FrmPedidoDetalle : Form
+    public class FrmPedidoDetalle : FrmBase
     {
         private readonly Pedido _pedido;
         private ComboBox _cmbEstado;

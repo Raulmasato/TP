@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Componentes
 {
     /// <summary>CU.001 Alta, CU.002 Modificación, CU.003 Baja de Componentes.</summary>
-    public class FrmComponentes : Form
+    public class FrmComponentes : FrmBase
     {
         private readonly BindingList<Componente> _componentes = new BindingList<Componente>(Modelos.Mocks.Componentes);
         private TextBox _txtBuscar;

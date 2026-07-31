@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ElectroJoule.PanelAdmin.Forms.Bitacora;
 using ElectroJoule.PanelAdmin.Forms.Categorias;
 using ElectroJoule.PanelAdmin.Forms.Clientes;
+using ElectroJoule.PanelAdmin.Forms.Common;
 using ElectroJoule.PanelAdmin.Forms.Componentes;
 using ElectroJoule.PanelAdmin.Forms.Devoluciones;
 using ElectroJoule.PanelAdmin.Forms.Errores;
@@ -16,7 +17,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Principal
 {
-    public class FrmPrincipal : Form
+    public class FrmPrincipal : FrmBase
     {
         public FrmPrincipal()
         {

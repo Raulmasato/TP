@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Clientes
 {
-    public class FrmClienteAltaEdicion : Form
+    public class FrmClienteAltaEdicion : FrmBase
     {
         private readonly List<Cliente> _existentes;
         private readonly bool _esEdicion;
