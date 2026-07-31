@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrito - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="barra-anuncio">Envíos a todo el país · Compra 100% online con seguimiento de pedido</div>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html">Catálogo</a>
+      <a href="mis-pedidos.html">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <h1 class="titulo-pagina">Mi carrito de compras</h1>
+  <p class="subtitulo-pagina">Revisá cantidades y stock disponible antes de confirmar la compra (CU.010).</p>
+
+  <div id="alertaStock" class="alerta alerta-advertencia oculto">
+    ⚠️ Uno o más ítems superan el stock disponible. Ajustá la cantidad antes de confirmar.
+  </div>
+
+  <div class="layout-dos-columnas">
+    <div>
+      <div id="listaItems"></div>
+      <div id="estadoVacio" class="estado-vacio oculto">
+        <div class="icono">🛒</div>
+        <strong>Tu carrito está vacío</strong>
+        <p>Agregá componentes desde el catálogo para verlos aquí.</p>
+        <br>
+        <a href="index.html" class="btn btn-primario">Ir al catálogo</a>
+      </div>
+    </div>
+
+    <aside class="resumen-carrito">
+      <h3 style="margin-top:0;">Resumen de compra</h3>
+      <div id="lineasResumen"></div>
+      <div class="linea-resumen total">
+        <span>Total</span>
+        <span id="totalGeneral">$ 0,00</span>
+      </div>
+      <br>
+      <button class="btn btn-primario btn-block" id="btnConfirmar" onclick="confirmarCompra()">Confirmar compra</button>
+      <a href="index.html" class="btn btn-texto btn-block" style="text-align:center; margin-top:8px;">Seguir comprando</a>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  // Precarga de ejemplo para que el carrito se vea poblado en la captura de pantalla.
+  if (obtenerCarrito().length === 0) {
+    guardarCarrito([
+      { codigo: "MCU-ESP32", cantidad: 1 },
+      { codigo: "CON-USB-C", cantidad: 8 },
+      { codigo: "CAP-220U-ELEC", cantidad: 20 },
+    ]);
+  }
+
+  function renderizarCarrito() {
+    const carrito = obtenerCarrito();
+    const lista = document.getElementById("listaItems");
+    const vacio = document.getElementById("estadoVacio");
+    const resumen = document.getElementById("lineasResumen");
+    const alertaStock = document.getElementById("alertaStock");
+    const btnConfirmar = document.getElementById("btnConfirmar");
+
+    if (carrito.length === 0) {
+      lista.classList.add("oculto");
+      vacio.classList.remove("oculto");
+      resumen.innerHTML = "";
+      document.getElementById("totalGeneral").textContent = formatearMoneda(0);
+      btnConfirmar.disabled = true;
+      alertaStock.classList.add("oculto");
+      return;
+    }
+
+    lista.classList.remove("oculto");
+    vacio.classList.add("oculto");
+    lista.innerHTML = "";
+    resumen.innerHTML = "";
+
+    let total = 0;
+    let haySobreStock = false;
+
+    carrito.forEach((item, idx) => {
+      const producto = CATALOGO.find(p => p.codigo === item.codigo);
+      const subtotal = producto.precio * item.cantidad;
+      total += subtotal;
+      const excedeStock = item.cantidad > producto.stock;
+      if (excedeStock) haySobreStock = true;
+
+      const div = document.createElement("div");
+      div.className = "item-carrito";
+      div.innerHTML = `
+        <div class="icono-item">${producto.icono}</div>
+        <div>
+          <strong>${producto.nombre}</strong><br>
+          <span style="font-size:12px; color:#8a93a3;">${producto.codigo} · ${producto.marca}</span><br>
+          ${excedeStock ? `<span class="mensaje-error-campo visible">Supera el stock disponible (${producto.stock} unidades)</span>` : ""}
+        </div>
+        <div class="selector-cantidad">
+          <button type="button" onclick="cambiarCantidadCarrito(${idx}, -1)">−</button>
+          <input type="number" value="${item.cantidad}" min="1" onchange="setCantidadCarrito(${idx}, this.value)">
+          <button type="button" onclick="cambiarCantidadCarrito(${idx}, 1)">+</button>
+        </div>
+        <div style="font-weight:700;">${formatearMoneda(subtotal)}</div>
+        <button class="btn btn-texto" style="color:#e74c3c;" onclick="eliminarDelCarrito(${idx})">🗑 Eliminar</button>
+      `;
+      lista.appendChild(div);
+
+      resumen.innerHTML += `<div class="linea-resumen"><span>${producto.nombre} (x${item.cantidad})</span><span>${formatearMoneda(subtotal)}</span></div>`;
+    });
+
+    document.getElementById("totalGeneral").textContent = formatearMoneda(total);
+    alertaStock.classList.toggle("oculto", !haySobreStock);
+    btnConfirmar.disabled = haySobreStock;
+  }
+
+  function cambiarCantidadCarrito(idx, delta) {
+    const carrito = obtenerCarrito();
+    carrito[idx].cantidad = Math.max(1, carrito[idx].cantidad + delta);
+    guardarCarrito(carrito);
+    renderizarCarrito();
+  }
+
+  function setCantidadCarrito(idx, valor) {
+    const carrito = obtenerCarrito();
+    carrito[idx].cantidad = Math.max(1, parseInt(valor) || 1);
+    guardarCarrito(carrito);
+    renderizarCarrito();
+  }
+
+  function eliminarDelCarrito(idx) {
+    const carrito = obtenerCarrito();
+    carrito.splice(idx, 1);
+    guardarCarrito(carrito);
+    renderizarCarrito();
+  }
+
+  function confirmarCompra() {
+    window.location.href = "checkout.html";
+  }
+
+  renderizarCarrito();
+</script>
+</body>
+</html>

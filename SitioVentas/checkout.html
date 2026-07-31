@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - ElectroJoule</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="contenedor">
+    <a href="index.html" class="logo"><span class="rayo">⚡</span> ElectroJoule</a>
+    <nav class="nav-links">
+      <a href="index.html">Catálogo</a>
+      <a href="mis-pedidos.html">Mis Pedidos</a>
+      <a href="solicitar-devolucion.html">Devoluciones</a>
+    </nav>
+    <div class="nav-acciones">
+      <span class="usuario-chip">👤 Juan Pérez</span>
+      <a href="carrito.html" class="icono-carrito">🛒<span class="badge-carrito">0</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <h1 class="titulo-pagina">Finalizar compra</h1>
+  <p class="subtitulo-pagina">Registrar venta: elegí el método de pago y confirmá la operación (CU.011, CU.014).</p>
+
+  <div class="pasos-checkout">
+    <span class="paso">1. Carrito</span>
+    <span class="paso activo">2. Datos de pago</span>
+    <span class="paso">3. Comprobante</span>
+  </div>
+
+  <div id="alertaError" class="alerta alerta-error oculto">
+    ✕ No se pudo procesar el pago. Verificá los datos ingresados e intentá nuevamente.
+  </div>
+
+  <div class="layout-dos-columnas">
+    <div>
+      <div class="tarjeta-form">
+        <h3 style="margin-top:0;">Método de pago</h3>
+        <div class="opciones-pago">
+          <div class="opcion-pago seleccionada" data-metodo="efectivo" onclick="seleccionarMetodo('efectivo')">💵<br>Efectivo</div>
+          <div class="opcion-pago" data-metodo="transferencia" onclick="seleccionarMetodo('transferencia')">🏦<br>Transferencia</div>
+          <div class="opcion-pago" data-metodo="tarjeta" onclick="seleccionarMetodo('tarjeta')">💳<br>Tarjeta</div>
+        </div>
+
+        <div id="formEfectivo" class="form-metodo">
+          <div class="campo-form">
+            <label>Punto de entrega / retiro</label>
+            <select>
+              <option>Sucursal ElectroJoule - CABA (Av. Corrientes 1234)</option>
+              <option>Sucursal ElectroJoule - La Plata</option>
+            </select>
+          </div>
+          <p style="font-size:13px; color:#6b7280;">El pago se abona en efectivo al momento del retiro o entrega.</p>
+        </div>
+
+        <div id="formTransferencia" class="form-metodo oculto">
+          <div class="campo-form">
+            <label>CBU / Alias de destino</label>
+            <input type="text" value="electrojoule.ventas" readonly>
+          </div>
+          <div class="campo-form">
+            <label>N° de comprobante de transferencia *</label>
+            <input type="text" id="txtComprobanteTransf" placeholder="Ej: 000123456789">
+            <div class="mensaje-error-campo" id="errComprobanteTransf">Debe ingresar el número de comprobante.</div>
+          </div>
+        </div>
+
+        <div id="formTarjeta" class="form-metodo oculto">
+          <div class="campo-form">
+            <label>Número de tarjeta *</label>
+            <input type="text" id="txtNumeroTarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
+            <div class="mensaje-error-campo" id="errNumeroTarjeta">Ingrese un número de tarjeta válido (16 dígitos).</div>
+          </div>
+          <div class="campo-form">
+            <label>Nombre del titular *</label>
+            <input type="text" id="txtTitular" placeholder="Como figura en la tarjeta">
+          </div>
+          <div style="display:flex; gap:14px;">
+            <div class="campo-form" style="flex:1;">
+              <label>Vencimiento *</label>
+              <input type="text" id="txtVencimiento" placeholder="MM/AA">
+            </div>
+            <div class="campo-form" style="flex:1;">
+              <label>CVV *</label>
+              <input type="text" id="txtCvv" placeholder="123" maxlength="4">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="resumen-carrito">
+      <h3 style="margin-top:0;">Resumen de la compra</h3>
+      <div id="lineasResumen"></div>
+      <div class="linea-resumen total">
+        <span>Total</span>
+        <span id="totalGeneral">$ 0,00</span>
+      </div>
+      <br>
+      <button class="btn btn-primario btn-block" onclick="confirmarPago()">Confirmar compra</button>
+      <button class="btn btn-texto btn-block" style="margin-top:6px; color:#e74c3c;" onclick="simularError()">Simular error de pago</button>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="contenedor">© 2026 ElectroJoule - Sistema de gestión comercial de componentes electrónicos (maqueta de interfaz)</div>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script>
+  if (obtenerCarrito().length === 0) {
+    guardarCarrito([
+      { codigo: "MCU-ESP32", cantidad: 1 },
+      { codigo: "CON-USB-C", cantidad: 8 },
+    ]);
+  }
+
+  function renderizarResumen() {
+    const carrito = obtenerCarrito();
+    const resumen = document.getElementById("lineasResumen");
+    resumen.innerHTML = "";
+    let total = 0;
+    carrito.forEach(item => {
+      const producto = CATALOGO.find(p => p.codigo === item.codigo);
+      const subtotal = producto.precio * item.cantidad;
+      total += subtotal;
+      resumen.innerHTML += `<div class="linea-resumen"><span>${producto.nombre} (x${item.cantidad})</span><span>${formatearMoneda(subtotal)}</span></div>`;
+    });
+    document.getElementById("totalGeneral").textContent = formatearMoneda(total);
+  }
+
+  function seleccionarMetodo(metodo) {
+    document.querySelectorAll(".opcion-pago").forEach(el => el.classList.toggle("seleccionada", el.dataset.metodo === metodo));
+    document.getElementById("formEfectivo").classList.toggle("oculto", metodo !== "efectivo");
+    document.getElementById("formTransferencia").classList.toggle("oculto", metodo !== "transferencia");
+    document.getElementById("formTarjeta").classList.toggle("oculto", metodo !== "tarjeta");
+    document.getElementById("alertaError").classList.add("oculto");
+  }
+
+  function metodoActual() {
+    return document.querySelector(".opcion-pago.seleccionada").dataset.metodo;
+  }
+
+  function confirmarPago() {
+    document.getElementById("alertaError").classList.add("oculto");
+    const metodo = metodoActual();
+    let valido = true;
+
+    if (metodo === "transferencia") {
+      const ok = document.getElementById("txtComprobanteTransf").value.trim() !== "";
+      document.getElementById("errComprobanteTransf").classList.toggle("visible", !ok);
+      valido = valido && ok;
+    }
+    if (metodo === "tarjeta") {
+      const numOk = document.getElementById("txtNumeroTarjeta").value.replace(/\s/g, "").length >= 16;
+      document.getElementById("errNumeroTarjeta").classList.toggle("visible", !numOk);
+      valido = valido && numOk;
+    }
+
+    if (!valido) {
+      document.getElementById("alertaError").textContent = "✕ Complete los datos requeridos para el método de pago seleccionado.";
+      document.getElementById("alertaError").classList.remove("oculto");
+      return;
+    }
+
+    localStorage.setItem("ej_ultimo_metodo_pago", metodo);
+    window.location.href = "comprobante.html";
+  }
+
+  function simularError() {
+    document.getElementById("alertaError").textContent = "✕ No se pudo procesar el pago. El medio de pago rechazó la operación. Intente nuevamente o elija otro método.";
+    document.getElementById("alertaError").classList.remove("oculto");
+  }
+
+  renderizarResumen();
+</script>
+</body>
+</html>
