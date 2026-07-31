@@ -53,8 +53,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             grid.Columns.Add("Subtotal", "Subtotal ($)");
             foreach (var item in _pedido.Detalle)
                 grid.Rows.Add(item.Componente, item.Cantidad, item.PrecioUnitario.ToString("N2"), item.Subtotal.ToString("N2"));
-            Controls.Add(grid);
-            grid.BringToFront();
 
             var panelInferior = new Panel { Dock = DockStyle.Bottom, Height = 130, Padding = new Padding(15, 10, 15, 10) };
             var lblTotal = new Label
@@ -81,6 +79,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             CancelButton = btnCerrar;
 
             Controls.Add(panelInferior);
+            Controls.Add(grid);
         }
 
         private void ActualizarEstado()

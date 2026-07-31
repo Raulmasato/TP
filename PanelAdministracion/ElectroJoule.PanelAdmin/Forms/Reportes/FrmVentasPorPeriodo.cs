@@ -84,8 +84,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);
-            contenedorGrid.BringToFront();
-            panelFiltros.BringToFront();
         }
 
         private void Buscar()

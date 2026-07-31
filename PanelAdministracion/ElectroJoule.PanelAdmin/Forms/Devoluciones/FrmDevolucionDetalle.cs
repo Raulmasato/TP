@@ -55,10 +55,6 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
             grid.Columns.Add("Cantidad", "Cantidad");
             foreach (var item in _devolucion.Detalle)
                 grid.Rows.Add(item.Componente, item.Cantidad);
-            Controls.Add(grid);
-            grid.BringToFront();
-            lblMotivo.BringToFront();
-            panelInfo.BringToFront();
 
             var panelInferior = new Panel { Dock = DockStyle.Bottom, Height = 60, Padding = new Padding(15, 10, 15, 10) };
             var esPendiente = _devolucion.Estado == "Pendiente";
@@ -73,6 +69,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
             panelInferior.Controls.Add(btnRechazar);
             panelInferior.Controls.Add(btnCerrar);
             Controls.Add(panelInferior);
+            Controls.Add(grid);
             CancelButton = btnCerrar;
 
             if (!esPendiente)
