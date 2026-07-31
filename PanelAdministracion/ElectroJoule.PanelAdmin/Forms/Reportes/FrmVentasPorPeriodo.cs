@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Reportes
 {
     /// <summary>CU.022 Reporte de Ventas por Período, CU.024 Exportar a Excel.</summary>
-    public class FrmVentasPorPeriodo : Form
+    public class FrmVentasPorPeriodo : FrmBase
     {
         private DateTimePicker _dtDesde, _dtHasta;
         private TextBox _txtCliente, _txtComponente;

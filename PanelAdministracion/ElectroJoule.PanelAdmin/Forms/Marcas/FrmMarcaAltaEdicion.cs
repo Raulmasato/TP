@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Marcas
 {
-    public class FrmMarcaAltaEdicion : Form
+    public class FrmMarcaAltaEdicion : FrmBase
     {
         private readonly List<Marca> _existentes;
         private readonly bool _esEdicion;

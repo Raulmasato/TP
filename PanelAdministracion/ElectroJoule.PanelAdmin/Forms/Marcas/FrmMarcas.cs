@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Marcas
 {
     /// <summary>CU.007 Alta, CU.008 Modificación, CU.009 Baja de Marcas.</summary>
-    public class FrmMarcas : Form
+    public class FrmMarcas : FrmBase
     {
         private readonly BindingList<Marca> _marcas = new BindingList<Marca>(Mocks.Marcas);
         private TextBox _txtBuscar;

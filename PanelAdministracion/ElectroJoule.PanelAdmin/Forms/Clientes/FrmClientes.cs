@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Clientes
 {
     /// <summary>CU.016 Alta, CU.017 Modificación, CU.018 Baja de Clientes.</summary>
-    public class FrmClientes : Form
+    public class FrmClientes : FrmBase
     {
         private readonly BindingList<Cliente> _clientes = new BindingList<Cliente>(Mocks.Clientes);
         private TextBox _txtBuscar;

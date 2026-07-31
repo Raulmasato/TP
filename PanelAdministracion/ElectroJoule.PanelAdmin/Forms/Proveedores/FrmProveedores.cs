@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Proveedores
 {
     /// <summary>CU.019 Alta, CU.020 Modificación, CU.021 Baja de Proveedores.</summary>
-    public class FrmProveedores : Form
+    public class FrmProveedores : FrmBase
     {
         private readonly BindingList<Proveedor> _proveedores = new BindingList<Proveedor>(Mocks.Proveedores);
         private TextBox _txtBuscar;

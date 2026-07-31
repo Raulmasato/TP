@@ -9,7 +9,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Pedidos
 {
     /// <summary>CU.013 Gestión de Pedidos (parte Administrador).</summary>
-    public class FrmPedidos : Form
+    public class FrmPedidos : FrmBase
     {
         private readonly BindingList<Pedido> _pedidos = new BindingList<Pedido>(Mocks.Pedidos);
         private ComboBox _cmbEstado;

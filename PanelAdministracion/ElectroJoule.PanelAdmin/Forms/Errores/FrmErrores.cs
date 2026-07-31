@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Errores
 {
     /// <summary>CU.Arq.007 Consulta de Errores.</summary>
-    public class FrmErrores : Form
+    public class FrmErrores : FrmBase
     {
         private DateTimePicker _dtDesde, _dtHasta;
         private ComboBox _cmbFuncionalidad, _cmbSeveridad;

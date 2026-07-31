@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Componentes
 {
-    public class FrmComponenteAltaEdicion : Form
+    public class FrmComponenteAltaEdicion : FrmBase
     {
         private readonly Componente _original;
         private readonly List<Componente> _existentes;

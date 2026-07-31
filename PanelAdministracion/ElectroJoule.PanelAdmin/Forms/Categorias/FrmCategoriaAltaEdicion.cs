@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Categorias
 {
-    public class FrmCategoriaAltaEdicion : Form
+    public class FrmCategoriaAltaEdicion : FrmBase
     {
         private readonly List<Categoria> _existentes;
         private readonly bool _esEdicion;

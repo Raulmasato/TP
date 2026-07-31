@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <LangVersion>7.3</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modelos\Mocks.cs" />
     <Compile Include="Forms\Common\ControlesAyuda.cs" />
+    <Compile Include="Forms\Common\FrmBase.cs" />
     <Compile Include="Forms\Principal\FrmPrincipal.cs" />
     <Compile Include="Forms\Componentes\FrmComponentes.cs" />
     <Compile Include="Forms\Componentes\FrmComponenteAltaEdicion.cs" />
@@ -67,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

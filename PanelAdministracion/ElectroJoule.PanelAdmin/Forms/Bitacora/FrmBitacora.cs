@@ -8,7 +8,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 namespace ElectroJoule.PanelAdmin.Forms.Bitacora
 {
     /// <summary>CU.Arq.002 Consulta de Bitácora.</summary>
-    public class FrmBitacora : Form
+    public class FrmBitacora : FrmBase
     {
         private DateTimePicker _dtDesde, _dtHasta;
         private TextBox _txtUsuario;

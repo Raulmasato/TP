@@ -5,7 +5,7 @@ using ElectroJoule.PanelAdmin.Modelos;
 
 namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
 {
-    public class FrmDevolucionDetalle : Form
+    public class FrmDevolucionDetalle : FrmBase
     {
         private readonly Devolucion _devolucion;
         private MensajePanel _mensaje;
