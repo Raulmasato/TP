@@ -79,6 +79,18 @@ namespace ElectroJoule.PanelAdmin.Forms.Bitacora
             panelFiltros.BringToFront();
         }
 
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // FrmBitacora
+            // 
+            this.ClientSize = new System.Drawing.Size(498, 357);
+            this.Name = "FrmBitacora";
+            this.ResumeLayout(false);
+
+        }
+
         private void Buscar()
         {
             var query = Mocks.Bitacora.Where(b => b.Fecha.Date >= _dtDesde.Value.Date && b.Fecha.Date <= _dtHasta.Value.Date);
