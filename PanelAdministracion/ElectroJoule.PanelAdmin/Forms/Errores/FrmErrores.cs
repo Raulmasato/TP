@@ -65,6 +65,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Errores
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Fecha", "Fecha y hora");
             _grid.Columns.Add("Funcionalidad", "Funcionalidad");
             _grid.Columns.Add("Severidad", "Severidad");
@@ -93,6 +94,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Errores
                 _grid.Rows[i].DefaultCellStyle.ForeColor = ColorSeveridad(e.Severidad);
             }
 
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

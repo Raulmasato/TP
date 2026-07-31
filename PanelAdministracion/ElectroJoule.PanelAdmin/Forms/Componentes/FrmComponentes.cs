@@ -74,6 +74,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Componentes
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Codigo", "Código");
             _grid.Columns.Add("Nombre", "Nombre");
             _grid.Columns.Add("Precio", "Precio ($)");
@@ -118,6 +119,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Componentes
                 if (!c.Activo)
                     _grid.Rows[i].DefaultCellStyle.ForeColor = Color.Gray;
             }
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

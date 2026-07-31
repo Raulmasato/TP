@@ -72,6 +72,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Marcas
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Nombre", "Nombre");
             _grid.Columns.Add("Origen", "Origen");
             _grid.Columns.Add("Componentes", "Componentes asociados");
@@ -103,6 +104,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Marcas
             _grid.Rows.Clear();
             foreach (var m in lista)
                 _grid.Rows.Add(m.Nombre, m.Origen, m.ComponentesAsociados);
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

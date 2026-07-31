@@ -83,6 +83,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Numero", "Número");
             _grid.Columns.Add("Cliente", "Cliente");
             _grid.Columns.Add("Fecha", "Fecha");
@@ -131,6 +132,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
                 int i = _grid.Rows.Add(p.Numero, p.Cliente, p.Fecha.ToString("dd/MM/yyyy"), p.Estado, p.Total.ToString("N2"));
                 _grid.Rows[i].DefaultCellStyle.ForeColor = ColorEstado(p.Estado);
             }
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

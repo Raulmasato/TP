@@ -64,6 +64,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Bitacora
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Fecha", "Fecha y hora");
             _grid.Columns.Add("Usuario", "Usuario");
             _grid.Columns.Add("Funcionalidad", "Funcionalidad");
@@ -89,6 +90,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Bitacora
             foreach (var b in lista)
                 _grid.Rows.Add(b.Fecha.ToString("dd/MM/yyyy HH:mm"), b.Usuario, b.Funcionalidad, b.Accion);
 
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

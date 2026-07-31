@@ -51,10 +51,12 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            grid.AplicarEstiloBase();
             grid.Columns.Add("Componente", "Componente a devolver");
             grid.Columns.Add("Cantidad", "Cantidad");
             foreach (var item in _devolucion.Detalle)
                 grid.Rows.Add(item.Componente, item.Cantidad);
+            grid.NormalizarVista();
 
             var panelInferior = new Panel { Dock = DockStyle.Bottom, Height = 60, Padding = new Padding(15, 10, 15, 10) };
             var esPendiente = _devolucion.Estado == "Pendiente";
