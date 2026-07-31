@@ -25,7 +25,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Bitacora
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Load += (s, e) => Buscar();
+            Shown += (s, e) => Buscar();
         }
 
         private void ConstruirUI()

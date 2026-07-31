@@ -109,13 +109,18 @@ namespace ElectroJoule.PanelAdmin.Forms.Common
             grid.RowTemplate.Height = 24;
         }
 
-        /// <summary>Asegura que, tras poblar la grilla, quede posicionada desde la primera fila (sin scroll ni selección residual).</summary>
+        /// <summary>Asegura que, tras poblar la grilla, quede posicionada desde la primera fila (sin scroll ni selección residual)
+        /// y fuerza un repintado completo, para evitar que el primer pintado quede parcial (header/primera fila no dibujados).</summary>
         public static void NormalizarVista(this DataGridView grid)
         {
-            if (grid.Rows.Count == 0) return;
-            grid.ClearSelection();
-            grid.CurrentCell = null;
-            grid.FirstDisplayedScrollingRowIndex = 0;
+            if (grid.Rows.Count > 0)
+            {
+                grid.ClearSelection();
+                grid.CurrentCell = null;
+                grid.FirstDisplayedScrollingRowIndex = 0;
+            }
+            grid.Invalidate(true);
+            grid.Update();
         }
     }
 }

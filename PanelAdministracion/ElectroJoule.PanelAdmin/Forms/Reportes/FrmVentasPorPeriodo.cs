@@ -26,7 +26,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Load += (s, e) => Buscar();
+            Shown += (s, e) => Buscar();
         }
 
         private void ConstruirUI()

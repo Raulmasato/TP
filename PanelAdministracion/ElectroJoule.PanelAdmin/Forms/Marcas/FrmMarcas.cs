@@ -27,7 +27,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Marcas
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Load += (s, e) => CargarGrid(_marcas.ToList());
+            Shown += (s, e) => CargarGrid(_marcas.ToList());
         }
 
         private void ConstruirUI()

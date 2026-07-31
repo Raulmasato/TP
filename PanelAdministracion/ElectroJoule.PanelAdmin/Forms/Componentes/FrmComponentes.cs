@@ -28,7 +28,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Componentes
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Load += (s, e) => CargarGrid(_componentes.ToList());
+            Shown += (s, e) => CargarGrid(_componentes.ToList());
         }
 
         private void ConstruirUI()

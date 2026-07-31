@@ -27,7 +27,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
             Font = new Font("Segoe UI", 9F);
 
             ConstruirUI();
-            Load += (s, e) => Filtrar();
+            Shown += (s, e) => Filtrar();
         }
 
         private void ConstruirUI()
