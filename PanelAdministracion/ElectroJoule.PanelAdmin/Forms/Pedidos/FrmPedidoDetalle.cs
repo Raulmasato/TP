@@ -19,7 +19,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             Text = $"Detalle del Pedido {pedido.Numero}";
             StartPosition = FormStartPosition.CenterParent;
             Width = 560;
-            Height = 520;
+            Height = 580;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -33,7 +33,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
             _mensaje = new MensajePanel();
             Controls.Add(_mensaje);
 
-            var panelInfo = new Panel { Dock = DockStyle.Top, Height = 125, Padding = new Padding(15, 45, 15, 5) };
+            var panelInfo = new Panel { Dock = DockStyle.Top, Height = 150, Padding = new Padding(15, 45, 15, 5) };
             panelInfo.Controls.Add(new Label { Text = $"Cliente: {_pedido.Cliente}", AutoSize = true, Location = new Point(0, 0), Font = new Font("Segoe UI", 9.5F, FontStyle.Bold) });
             panelInfo.Controls.Add(new Label { Text = $"Fecha del pedido: {_pedido.Fecha:dd/MM/yyyy}", AutoSize = true, Location = new Point(0, 25) });
             Controls.Add(panelInfo);

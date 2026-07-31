@@ -84,7 +84,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Proveedores
             };
 
             _lblSinResultados = new SinResultadosLabel();
-            var contenedorGrid = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0, 35, 0, 0) };
+            var contenedorGrid = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0, 45, 0, 0) };
             contenedorGrid.Controls.Add(_grid);
             contenedorGrid.Controls.Add(_lblSinResultados);
             Controls.Add(contenedorGrid);
