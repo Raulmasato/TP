@@ -58,6 +58,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Numero", "Número");
             _grid.Columns.Add("VentaOrigen", "Venta de origen");
             _grid.Columns.Add("Cliente", "Cliente");
@@ -87,6 +88,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Devoluciones
                 if (d.Estado == "Aprobada") _grid.Rows[i].DefaultCellStyle.ForeColor = Color.FromArgb(39, 174, 96);
                 if (d.Estado == "Rechazada") _grid.Rows[i].DefaultCellStyle.ForeColor = Color.FromArgb(192, 57, 43);
             }
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

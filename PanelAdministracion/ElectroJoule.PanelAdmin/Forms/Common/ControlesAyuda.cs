@@ -88,4 +88,34 @@ namespace ElectroJoule.PanelAdmin.Forms.Common
             Visible = false;
         }
     }
+
+    public static class DataGridViewExtensions
+    {
+        /// <summary>
+        /// Fuerza el pintado "clásico" (no delegado al tema de Windows) del encabezado de columnas.
+        /// EnableHeadersVisualStyles=true (el valor por defecto) delega el dibujo del header a uxtheme.dll,
+        /// lo que en ciertas combinaciones de Windows/tema/RDP puede pintarlo con altura o colores inconsistentes.
+        /// Fijar el estilo explícitamente evita depender de ese renderizado.
+        /// </summary>
+        public static void AplicarEstiloBase(this DataGridView grid)
+        {
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            grid.ColumnHeadersHeight = 30;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(238, 241, 245);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(35, 40, 50);
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            grid.RowTemplate.Height = 24;
+        }
+
+        /// <summary>Asegura que, tras poblar la grilla, quede posicionada desde la primera fila (sin scroll ni selección residual).</summary>
+        public static void NormalizarVista(this DataGridView grid)
+        {
+            if (grid.Rows.Count == 0) return;
+            grid.ClearSelection();
+            grid.CurrentCell = null;
+            grid.FirstDisplayedScrollingRowIndex = 0;
+        }
+    }
 }

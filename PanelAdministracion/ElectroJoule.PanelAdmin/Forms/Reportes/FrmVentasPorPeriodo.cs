@@ -72,6 +72,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Numero", "N° Venta");
             _grid.Columns.Add("Fecha", "Fecha");
             _grid.Columns.Add("Cliente", "Cliente");
@@ -101,6 +102,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
             foreach (var v in lista)
                 _grid.Rows.Add(v.Numero, v.Fecha.ToString("dd/MM/yyyy"), v.Cliente, v.Componente, v.Cantidad, v.Total.ToString("N2"));
 
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

@@ -62,6 +62,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Fecha", "Fecha y hora");
             _grid.Columns.Add("Componente", "Componente");
             _grid.Columns.Add("Tipo", "Tipo de movimiento");
@@ -91,6 +92,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Reportes
                 _grid.Rows[i].DefaultCellStyle.ForeColor = m.Cantidad < 0 ? Color.FromArgb(192, 57, 43) : Color.FromArgb(39, 174, 96);
             }
 
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

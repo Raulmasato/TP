@@ -72,6 +72,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Proveedores
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            _grid.AplicarEstiloBase();
             _grid.Columns.Add("Nombre", "Nombre / Razón social");
             _grid.Columns.Add("Cuit", "CUIT");
             _grid.Columns.Add("Contacto", "Contacto");
@@ -108,6 +109,7 @@ namespace ElectroJoule.PanelAdmin.Forms.Proveedores
                 int i = _grid.Rows.Add(p.Nombre, p.Cuit, p.Contacto, p.Activo ? "Activo" : "Inactivo");
                 if (!p.Activo) _grid.Rows[i].DefaultCellStyle.ForeColor = Color.Gray;
             }
+            _grid.NormalizarVista();
             bool sinResultados = lista.Count == 0;
             _lblSinResultados.Visible = sinResultados;
             _grid.Visible = !sinResultados;

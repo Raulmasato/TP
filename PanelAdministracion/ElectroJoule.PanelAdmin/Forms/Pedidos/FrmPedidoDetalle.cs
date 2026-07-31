@@ -47,12 +47,14 @@ namespace ElectroJoule.PanelAdmin.Forms.Pedidos
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BackgroundColor = Color.White
             };
+            grid.AplicarEstiloBase();
             grid.Columns.Add("Componente", "Componente");
             grid.Columns.Add("Cantidad", "Cantidad");
             grid.Columns.Add("PrecioUnitario", "Precio unit. ($)");
             grid.Columns.Add("Subtotal", "Subtotal ($)");
             foreach (var item in _pedido.Detalle)
                 grid.Rows.Add(item.Componente, item.Cantidad, item.PrecioUnitario.ToString("N2"), item.Subtotal.ToString("N2"));
+            grid.NormalizarVista();
 
             var panelInferior = new Panel { Dock = DockStyle.Bottom, Height = 130, Padding = new Padding(15, 10, 15, 10) };
             var lblTotal = new Label
